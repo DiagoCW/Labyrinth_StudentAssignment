@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 5a8a4e0becc2f614fbf29a5746e3b21d
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 273788
+  packageName: .NET 6.0 Priority Queue
+  packageVersion: 1.0
+  assetPath: Assets/ThirdParty/AmyElliott/PriorityQueue/README.md
+  uploadId: 636016

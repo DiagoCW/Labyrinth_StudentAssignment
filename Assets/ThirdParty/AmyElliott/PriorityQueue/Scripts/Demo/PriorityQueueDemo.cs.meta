@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 115f43b973ddaeb4cac6cb922a2653b2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 273788
+  packageName: .NET 6.0 Priority Queue
+  packageVersion: 1.0
+  assetPath: Assets/ThirdParty/AmyElliott/PriorityQueue/Scripts/Demo/PriorityQueueDemo.cs
+  uploadId: 636016

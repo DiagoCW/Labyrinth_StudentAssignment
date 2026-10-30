@@ -8,6 +8,11 @@ public static class PathfindingAlgorithm
     // Find the lowest-cost path from start to goal using the map dimensions, wall costs and directed jumps exposed by IMapData.
     public static List<Vector2Int> FindShortestPath(Vector2Int start, Vector2Int goal, IMapData mapData)
     {
+        return FindShortestPathBFS(start, goal, mapData);
+    }
+
+    public static List<Vector2Int> FindShortestPathBFS(Vector2Int start, Vector2Int goal, IMapData mapData) 
+    {
         // BFS implementation
         // För en BFS behövs en Queue för o hålla ordning på vilka noder (rutor) som ska checkas next (FIFO)
         // Ett HashSet för att hålla koll på vilka rutor som är redan besökta
@@ -26,17 +31,17 @@ public static class PathfindingAlgorithm
 
         bool foundPath = false;
 
-        while (adjacentSQUARES.Count > 0) 
+        while (adjacentSQUARES.Count > 0)
         {
             Vector2Int currentSquare = adjacentSQUARES.Dequeue();
 
-            if (currentSquare == goal) 
+            if (currentSquare == goal)
             {
                 foundPath = true;
                 break;
             }
 
-            foreach (Vector2Int dir in directions) 
+            foreach (Vector2Int dir in directions)
             {
                 Vector2Int adjacentSquare = currentSquare + dir;
 
@@ -53,10 +58,10 @@ public static class PathfindingAlgorithm
                     continue;
 
                 // Lägg till rutan som ligger granne längst bak i kön så man kan checka dess grannar senare
-                adjacentSQUARES.Enqueue(adjacentSquare); 
+                adjacentSQUARES.Enqueue(adjacentSquare);
 
                 // Markera rutan som besökt
-                visited.Add(adjacentSquare); 
+                visited.Add(adjacentSquare);
 
                 // Spara vägen man gått
                 cameFrom[adjacentSquare] = currentSquare;
@@ -69,7 +74,7 @@ public static class PathfindingAlgorithm
         List<Vector2Int> path = new();
         Vector2Int currentPathNode = goal;
 
-        while(currentPathNode != start) 
+        while (currentPathNode != start)
         {
             path.Add(currentPathNode);
             currentPathNode = cameFrom[currentPathNode];
