@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 5f1ace672d05d9a4c9251ed25eddd7f9
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 273788
+  packageName: .NET 6.0 Priority Queue
+  packageVersion: 1.0
+  assetPath: Assets/ThirdParty/AmyElliott/PriorityQueue/LICENSE.md
+  uploadId: 636016

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 60eeb9469ea98ef47a8a37957d4ef04b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 273788
+  packageName: .NET 6.0 Priority Queue
+  packageVersion: 1.0
+  assetPath: Assets/ThirdParty/AmyElliott/PriorityQueue/Materials/Green.mat
+  uploadId: 636016

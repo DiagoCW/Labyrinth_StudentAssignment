@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1af65a022ca8f2843bd4f201b84a8874
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 273788
+  packageName: .NET 6.0 Priority Queue
+  packageVersion: 1.0
+  assetPath: Assets/ThirdParty/AmyElliott/PriorityQueue/Materials/Red.mat
+  uploadId: 636016
