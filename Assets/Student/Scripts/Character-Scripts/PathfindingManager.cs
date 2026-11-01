@@ -11,6 +11,8 @@ public class PathfinderManager : MonoBehaviour
     [Header("Settings")]
     public bool autoStart = true;
     public float startDelay = 2f;
+    [Tooltip("If true, use BFS; if false, use Dijkstra")]
+    public bool useBFS = true;
 
     [Header("Debug Visualization")]
     public bool showDebugPath = true;
@@ -42,7 +44,7 @@ public class PathfinderManager : MonoBehaviour
         Vector2Int startPos = mapDataInterface.GetQuestStart(questIndex);
         Vector2Int goalPos = mapDataInterface.GetQuestGoal(questIndex);
 
-        List<Vector2Int> path = PathfindingAlgorithm.FindShortestPath(startPos, goalPos, mapDataInterface);
+        List<Vector2Int> path = PathfindingAlgorithm.FindShortestPath(startPos, goalPos, mapDataInterface, useBFS);
         if (path == null || path.Count == 0)
         {
             Debug.LogError("No path found.");

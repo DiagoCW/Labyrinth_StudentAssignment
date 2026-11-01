@@ -466,7 +466,7 @@ PrefabInstance:
       objectReference: {fileID: 2120782614}
     - target: {fileID: 2697895973313742624, guid: 0a7983cc724fc554a9cbc4ef450723a9, type: 3}
       propertyPath: fileName
-      value: ex1.json
+      value: ex2.json
       objectReference: {fileID: 0}
     - target: {fileID: 2697895973313742624, guid: 0a7983cc724fc554a9cbc4ef450723a9, type: 3}
       propertyPath: endPrefab
@@ -475,6 +475,10 @@ PrefabInstance:
     - target: {fileID: 2697895973313742624, guid: 0a7983cc724fc554a9cbc4ef450723a9, type: 3}
       propertyPath: questIndex
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2697895973313742624, guid: 0a7983cc724fc554a9cbc4ef450723a9, type: 3}
+      propertyPath: ventPrefab
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2697895973313742624, guid: 0a7983cc724fc554a9cbc4ef450723a9, type: 3}
       propertyPath: startPrefab
@@ -1440,6 +1444,7 @@ MonoBehaviour:
   pathfindingUI: {fileID: 0}
   autoStart: 1
   startDelay: 2
+  useBFS: 1
   showDebugPath: 1
   pathColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   jumpPathColor: {r: 1, g: 0, b: 0, a: 1}

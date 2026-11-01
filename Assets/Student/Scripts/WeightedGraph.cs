@@ -1,25 +1,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct EdgeToBajs 
+public struct WeightedEdge 
 {
     public Vector2Int To;
     public float Weight;
 
-    public EdgeToBajs(Vector2Int to, float weight) 
+    public WeightedEdge(Vector2Int to, float weight) 
     {
         To = to;
         Weight = weight;
     }
 }
 
-public class BajsScript
+/// <summary>
+/// Weighted graph representation for Dijkstra; 
+/// uses shortcuts through walls and portal jumps where each weight cost is considered
+/// </summary>
+public class WeightedGraph
 {
-    private Dictionary<Vector2Int, List<EdgeToBajs>> adj;
-
-    public BajsScript(IMapData m)
+    public Dictionary<Vector2Int, List<WeightedEdge>> Adj { get; private set; }
+    public int V { get; private set; }
+    public int E { get; private set; }
+    public WeightedGraph(IMapData m)
     {
-        adj = new Dictionary<Vector2Int, List<EdgeToBajs>>();
+        V = m.Width * m.Height;
+        Adj = new Dictionary<Vector2Int, List<WeightedEdge>>(V); // initialize adjacency list with node capacity
         Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
 
         for (int i = 0; i < m.Width; i++)
@@ -27,7 +33,7 @@ public class BajsScript
             for (int j = 0; j < m.Height; j++)
             {
                 Vector2Int current = new Vector2Int(i, j);
-                adj[current] = new List<EdgeToBajs>();
+                Adj[current] = new List<WeightedEdge>();
 
                 foreach (Vector2Int dir in directions)
                 {
@@ -47,41 +53,22 @@ public class BajsScript
                     // Checka om det finns vägg man kan klättra genom
                     if (dir.x != 0) // rör sig i x led
                     {
-                        int wallX;
-
-                        if (dir.x > 0)
-                        {
-                            wallX = neighbor.x;
-                        }
-                        else
-                        {
-                            wallX = current.x;
-                        }
+                        int wallX = dir.x > 0 ? neighbor.x : current.x;
 
                         float wallCost = m.GetVerticalWallCost(wallX, current.y);
-
                         if (wallCost > 1)
                             cost = wallCost;
                     }
                     else if (dir.y != 0) // rör sig i y led
                     {
-                        int wallY;
-
-                        if (dir.y > 0)
-                        {
-                            wallY = neighbor.y;
-                        }
-                        else
-                        {
-                            wallY = current.y;
-                        }
+                        int wallY = dir.y > 0 ? neighbor.y : current.y;
+                        
                         float wallCost = m.GetHorizontalWallCost(current.x, wallY);
                         if (wallCost > 1)
                             cost = wallCost;
                     }
 
-                    // Lägga i listan
-                    adj[current].Add(new EdgeToBajs(neighbor, cost));
+                    Adj[current].Add(new WeightedEdge(neighbor, cost));
                 }
 
                 // kolla jumps
@@ -91,18 +78,27 @@ public class BajsScript
                 {
                     foreach (var jump in jumps)
                     {
-                        adj[current].Add(new EdgeToBajs(jump.To, jump.Cost));
+                        Adj[current].Add(new WeightedEdge(jump.To, jump.Cost));
+                        //// borde varje jump vara riktad i endast en riktning?
+                        //Adj[jump.To].Add(new WeightedEdge(current, jump.Cost));
                     }
                 }
             }
         }
+
+        // Count all edges
+        foreach (var kvp in Adj)
+        {
+            E += kvp.Value.Count;
+        }
+        Debug.Log($"WeightedGraph created with {V} vertices and {E} edges");
     }
 
-    public List<EdgeToBajs> Adjacent(Vector2Int node)
+    public List<WeightedEdge> Adjacent(Vector2Int node)
     {
-        if (adj.ContainsKey(node))
-            return adj[node];
+        if (Adj.TryGetValue(node, out var edges))
+            return edges;
 
-        return new List<EdgeToBajs>(); // tom om inget finns
+        return new List<WeightedEdge>(); // tom om inget finns
     }
 }
