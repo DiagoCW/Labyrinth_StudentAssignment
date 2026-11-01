@@ -8,7 +8,8 @@ public static class PathfindingAlgorithm
     // Find the lowest-cost path from start to goal using the map dimensions, wall costs and directed jumps exposed by IMapData.
     public static List<Vector2Int> FindShortestPath(Vector2Int start, Vector2Int goal, IMapData mapData)
     {
-        return FindShortestPathBFS(start, goal, mapData);
+        //return FindShortestPathBFS(start, goal, mapData);
+        return FindShortestPathDijkstra(start, goal, mapData);
     }
 
     public static List<Vector2Int> FindShortestPathBFS(Vector2Int start, Vector2Int goal, IMapData mapData) 
@@ -108,5 +109,79 @@ public static class PathfindingAlgorithm
         int wallY = deltaY > 0 ? to.y : from.y;
         float horizontalWallCost = mapData.GetHorizontalWallCost(from.x, wallY);
         return float.IsPositiveInfinity(horizontalWallCost) || horizontalWallCost >= float.MaxValue;
+    }
+    
+    public static List<Vector2Int> FindShortestPathDijkstra(Vector2Int start, Vector2Int goal, IMapData mapData)
+    {
+        // Dijkstras algoritm utifrån bokens implementation s. 655 anpassad för att fungera här
+        
+        // Temp - ändra BajsScript till den RIKTIGA sen
+        BajsScript graph = new BajsScript(mapData); // skapa grafen
+
+        Dictionary<Vector2Int, float> distTo = new(); // Håller koll på minsta kostnaden från start till x ruta.
+        Dictionary<Vector2Int, Vector2Int> edgeTo = new(); // sparar vilken ruta man kom från för att nå hit billigast
+        PriorityQueue<Vector2Int> pq = new(); // Sorterar rutorna så man går till den med lägst kostnad först
+
+        // start
+        // segt att pq här tar ba int , måste omvandla float -> int sen
+        distTo[start] = 0f; // Kostanden för startrutan är 0
+        pq.Enqueue(start, 0); // pq.insert(s, 0 ,0) 
+
+        bool foundPath = false;
+
+        while (pq.Count > 0) // while (!pq.isEmpty()) -> relax
+        {
+            Vector2Int v = pq.Dequeue(); // pq.delMin
+
+            // bryt loopen
+            if (v == goal)
+            {
+                foundPath = true;
+                break;
+            }
+
+            // reelllaaaaxxx
+            foreach (var e in graph.Adjacent(v))  // loopa genom alla edges/väger man kan nå från ruta/node 'v' - for(DirectedEdge e : G.adj(v))
+            {
+                Vector2Int w = e.To; // w är grannen - int w = e.to();
+
+                // Om inte sett grannen än, sätt till infinity
+                if (!distTo.ContainsKey(w)) 
+                {
+                    distTo[w] = float.PositiveInfinity;
+                }
+
+                // om vägen till w via vår nuvarande nod/ruta v är billigare än det bästa man sett hittils
+                // if (distTo[w] > distTo[v] + e.weight())
+                if (distTo[w] > distTo[v] + e.Weight) 
+                {
+                    distTo[w] = distTo[v] + e.Weight; // Update kortaste avstånded
+
+                    edgeTo[w] = v; // spara att detta är bästa man kan nå w från v
+
+                    // Lägg grannen i kön så man kan checka dess edges senare
+                    // * 10 för varje weight eftersom vissa weights är 5.5, blir slutändan samma resultat när man letar kortast avstånd
+                    // pq.insert/change
+                    pq.Enqueue(w, (int)(distTo[w] * 10));
+
+                }
+            }
+        }
+
+        if (!foundPath) return null; 
+
+        List<Vector2Int> path = new List<Vector2Int>();
+        Vector2Int current = goal;
+
+        while (current != start) // följer edgeTo från mål till start
+        {
+            path.Add(current);
+            current = edgeTo[current];
+        }
+
+        path.Add(start);
+        path.Reverse();
+
+        return path;
     }
 }
