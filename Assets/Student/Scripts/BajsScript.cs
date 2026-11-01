@@ -67,7 +67,7 @@ public class BajsScript
                     {
                         int wallY;
 
-                        if (dir.x > 0)
+                        if (dir.y > 0)
                         {
                             wallY = neighbor.y;
                         }
