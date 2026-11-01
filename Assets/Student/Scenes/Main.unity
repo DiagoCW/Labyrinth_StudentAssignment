@@ -477,6 +477,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2697895973313742624, guid: 0a7983cc724fc554a9cbc4ef450723a9, type: 3}
+      propertyPath: ventPrefab
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2697895973313742624, guid: 0a7983cc724fc554a9cbc4ef450723a9, type: 3}
       propertyPath: startPrefab
       value: 
       objectReference: {fileID: 7330026101753579403, guid: 7c6f507ad8411764db44657ab955b5d7, type: 3}
@@ -1440,6 +1444,7 @@ MonoBehaviour:
   pathfindingUI: {fileID: 0}
   autoStart: 1
   startDelay: 2
+  useBFS: 1
   showDebugPath: 1
   pathColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   jumpPathColor: {r: 1, g: 0, b: 0, a: 1}

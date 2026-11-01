@@ -2,45 +2,85 @@ using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
 
+public struct Edge
+{
+    public Vector2Int To { get; private set; }
+    public Edge(Vector2Int to)
+    {
+        To = to;
+    }
+}
+/// <summary>
+/// Unweighted graph representation for BFS
+/// </summary>
 public class Graph
 {
-    int V; // nbr of nodes, W - 1 x H - 1 of map si<w
-    public List<List<KeyValuePair<int, int>>> Adj { get; private set; } // Node 1 has an edge to Node 3 with a weight of 4
-                                                                        // and an edge to Node 2 with a weight of 3:
-                                                                        // adj[1] = { 3, 4 } { 2, 3 }
-                                                                        // Example: Get edge weight from node 1 to node 2:
-                                                                        // adj[1][2].Value = 3
-    public PriorityQueue<int> MinPQ { get; private set; }
-    // public bool[] visited { get; private set; }
-    
-    //public struct Node
-    //{
-
-    //}
-
+    public int V { get; private set; }
+    public int E { get; private set; }
+    public Dictionary<Vector2Int, List<Edge>> Adj { get; private set; }
+    readonly Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
     public Graph(IMapData m)
     {
-        V = (m.Width - 1) * (m.Height) - 1;
-        Adj = new(V);
-        MinPQ = new();
+        V = m.Width * m.Height;
+        Adj = new Dictionary<Vector2Int, List<Edge>>();
+
+        for (int i = 0; i < m.Width; i++)
+        {
+            for (int j = 0; j < m.Height; j++)
+            {
+                Vector2Int current = new Vector2Int(i, j);
+                Adj[current] = new List<Edge>();
+
+                foreach (Vector2Int dir in directions)
+                {
+                    Vector2Int neighbor = current + dir;
+
+                    // Om rutan bredvid är utanför mapen så skit i den
+                    if (neighbor.x < 0 || neighbor.x >= m.Width || neighbor.y < 0 || neighbor.y >= m.Height)
+                        continue;
+
+                    // Om pathen e blockerad av en mur eller något, skit i den
+                    if (PathfindingAlgorithm.IsMovementBlocked(current, neighbor, m))
+                        continue;
+
+                    // Om det finns en genväg (genvägg höhöhö) så är det ej en giltig edge för BFS
+                    if (dir.x != 0) // rör sig i x led
+                    {
+                        int wallX = dir.x > 0 ? neighbor.x : current.x;
+
+                        float wallCost = m.GetVerticalWallCost(wallX, current.y);
+                        if (wallCost > 1f) 
+                            continue;
+                    }
+                    else if (dir.y != 0) // rör sig i y led
+                    {
+                        int wallY = dir.y > 0 ? neighbor.y : current.y;
+
+                        float wallCost = m.GetHorizontalWallCost(current.x, wallY);
+                        if (wallCost > 1f)
+                            continue;
+                    }
+
+                    Adj[current].Add(new Edge(neighbor));
+                }
+
+            }
+        }
+
+        //E = Adj.Count; //// ej korrekt, räknar endast antalet noder
+        // Count all edges
+        foreach (var kvp in Adj)
+        {
+            E += kvp.Value.Count;
+        }
+        Debug.Log($"Unweighted Graph created with {V} vertices and {E} edges");
     }
 
-    public void AddEdge(int u, int v, int weight)
+    public List<Edge> Adjacent(Vector2Int v)
     {
-        Adj[u].Add(new KeyValuePair<int, int>(v, weight));
+        if (Adj.TryGetValue(v, out var edges))
+            return edges;
+        return new List<Edge>();
     }
-
-    public int GetWeight(int from, int to)
-    {
-        if (Adj[from].Contains(Adj[from][to]))
-            return Adj[from][to].Value;
-        return -1;
-    }
-
-    //// Flytta till PathfinderAlgorithm.cs
-    //public void Relax()
-    //{
-
-    //}
 
 }
