@@ -474,7 +474,7 @@ PrefabInstance:
       objectReference: {fileID: 1093558810265427060, guid: d983414088423d547a0c8de1c3bb6c1c, type: 3}
     - target: {fileID: 2697895973313742624, guid: 0a7983cc724fc554a9cbc4ef450723a9, type: 3}
       propertyPath: questIndex
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2697895973313742624, guid: 0a7983cc724fc554a9cbc4ef450723a9, type: 3}
       propertyPath: ventPrefab
