@@ -17,6 +17,7 @@ public class Graph
 {
     public int V { get; private set; }
     public int E { get; private set; }
+    public int nbrWalls { get; private set; }
     public Dictionary<Vector2Int, List<Edge>> Adj { get; private set; }
     readonly Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
     public Graph(IMapData m)
@@ -40,8 +41,8 @@ public class Graph
                         continue;
 
                     // Om pathen e blockerad av en mur eller något, skit i den
-                    if (PathfindingAlgorithm.IsMovementBlocked(current, neighbor, m))
-                        continue;
+                    //if (PathfindingAlgorithm.IsMovementBlocked(current, neighbor, m))
+                    //    continue;
 
                     // Om det finns en genväg (genvägg höhöhö) så är det ej en giltig edge för BFS
                     if (dir.x != 0) // rör sig i x led
@@ -49,8 +50,12 @@ public class Graph
                         int wallX = dir.x > 0 ? neighbor.x : current.x;
 
                         float wallCost = m.GetVerticalWallCost(wallX, current.y);
-                        if (wallCost > 1f) 
+                        if (wallCost > 1f)
+                        {
+                            nbrWalls++;
                             continue;
+                        }
+                            
                     }
                     else if (dir.y != 0) // rör sig i y led
                     {
@@ -58,22 +63,30 @@ public class Graph
 
                         float wallCost = m.GetHorizontalWallCost(current.x, wallY);
                         if (wallCost > 1f)
+                        {
+                            nbrWalls++;
                             continue;
+                        }
+                            
                     }
-
+                    //Debug.Log($"Found edge from {current} to {neighbor}");
                     Adj[current].Add(new Edge(neighbor));
+                    E++;
                 }
 
             }
         }
 
-        //E = Adj.Count; //// ej korrekt, räknar endast antalet noder
-        // Count all edges
-        foreach (var kvp in Adj)
+        Debug.Log($"Unweighted Graph created with {V} vertices and {E} edges and {nbrWalls} walls.");
+        foreach (var e in Adj)
         {
-            E += kvp.Value.Count;
+            Debug.Log($"Node ({e.Key}) has edge to: ");
+            var edges = Adjacent(e.Key);
+            foreach (var edge in edges)
+            {
+                Debug.Log($"{edge.To}, ");
+            }
         }
-        Debug.Log($"Unweighted Graph created with {V} vertices and {E} edges");
     }
 
     public List<Edge> Adjacent(Vector2Int v)
